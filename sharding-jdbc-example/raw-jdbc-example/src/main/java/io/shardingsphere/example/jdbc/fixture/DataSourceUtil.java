@@ -20,17 +20,34 @@ package io.shardingsphere.example.jdbc.fixture;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import javax.sql.DataSource;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
 
 public class DataSourceUtil {
-    
+
     private static final String HOST = "localhost";
-    
+
     private static final int PORT = 3306;
-    
+
     private static final String USER_NAME = "root";
-    
-    private static final String PASSWORD = "";
-    
+
+    private static String PASSWORD = "";
+
+    static {
+        URL passwordFile = DataSourceUtil.class.getClassLoader().getResource("password.txt");
+        if (passwordFile != null) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(passwordFile.getFile()))) {
+                PASSWORD = reader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("WARNING: no specific password.txt file");
+        }
+    }
+
     public static DataSource createDataSource(final String dataSourceName) {
         BasicDataSource result = new BasicDataSource();
         result.setDriverClassName(com.mysql.jdbc.Driver.class.getName());

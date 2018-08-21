@@ -31,3 +31,6 @@ logs/
 Thumbs.db
 
 *.class
+
+# private
+password.txt
