@@ -33,19 +33,21 @@ public class DataSourceUtil {
 
     private static final String USER_NAME = "root";
 
-    private static String PASSWORD = "";
+    private static final String PASSWORD;
 
     static {
-        URL passwordFile = DataSourceUtil.class.getClassLoader().getResource("password.txt");
+        String passwordTmp = "";
+        URL passwordFile = DataSourceUtil.class.getResource("/password.txt");
         if (passwordFile != null) {
             try (BufferedReader reader = new BufferedReader(new FileReader(passwordFile.getFile()))) {
-                PASSWORD = reader.readLine();
+                passwordTmp = reader.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             System.err.println("WARNING: no specific password.txt file");
         }
+        PASSWORD = passwordTmp;
     }
 
     public static DataSource createDataSource(final String dataSourceName) {
